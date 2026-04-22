@@ -1,3 +1,36 @@
+<h1 align="center" style="margin:0;">ht-mergekit</h1>
+<h3 align="center" style="margin: 0; margin-top: 0;">
+<a href="https://github.com/heiervang-technologies">Heiervang Technologies</a> fork of <a href="https://github.com/arcee-ai/mergekit">mergekit</a>
+</h3>
+
+<p align="center">
+  <a href="https://github.com/orgs/heiervang-technologies/discussions">HT Discussions</a> •
+  <a href="https://github.com/orgs/heiervang-technologies/discussions/3">Fork Management Guide</a> •
+  <a href="https://github.com/arcee-ai/mergekit">Upstream Project</a>
+</p>
+
+## HT Fork Changes
+
+This is the [Heiervang Technologies](https://github.com/heiervang-technologies) fork of [mergekit](https://github.com/arcee-ai/mergekit). The `ht` branch carries HT-specific changes on top of upstream `main`.
+
+### What ht-mergekit adds
+
+| Change | Description | Contributed back? |
+|---|---|---|
+| _(none yet)_ | Fork bootstrap only — docs, branch layout, CI wiring. HT-specific merge features will land here. | — |
+
+For anything not listed above, behavior matches upstream — see the [mergekit README below](#mergekit) and the [upstream repo](https://github.com/arcee-ai/mergekit).
+
+### Branch Strategy
+
+- **`main`** — Clean fast-forward mirror of upstream `main`. Never commit directly.
+- **`ht`** — Default branch with all HT-specific changes on top of `main`.
+- Feature branches are created from `ht` and merged back via squash-merge PR.
+
+For questions or discussion about this fork, visit the [HT Discussions](https://github.com/orgs/heiervang-technologies/discussions) page. For details on how we manage forks, see the [Fork Management Guide](https://github.com/orgs/heiervang-technologies/discussions/3).
+
+---
+
 # mergekit
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
