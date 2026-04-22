@@ -17,7 +17,9 @@ This is the [Heiervang Technologies](https://github.com/heiervang-technologies) 
 
 | Change | Description | Contributed back? |
 |---|---|---|
-| _(none yet)_ | Fork bootstrap only — docs, branch layout, CI wiring. HT-specific merge features will land here. | — |
+| **Gemma 4 support** | Adds `Gemma4ForConditionalGeneration` architecture covering the dense VL 31B and MoE 26B-A4B SKUs, including shared-V structural layers and MoE-optional tensors. Elastic (E4B/E2B) variants with PLE + audio + QAT are tracked for a follow-up — see [`docs/gemma_support.md`](docs/gemma_support.md). | Not yet |
+| **Better multi-module slice error** | Top-level `slices:` against a multi-module architecture (Gemma 3 VL, Llava, Gemma 4 VL) now names the actual module keys and shows the `modules:` stanza to write. Addresses the confusing UX part of upstream [#537](https://github.com/arcee-ai/mergekit/issues/537). | Not yet |
+| **Gemma 2/3 merge regression tests** | End-to-end regression tests for Gemma 2 SLERP/TIES/linear (locks in working behavior after the user-error confusion in upstream [#611](https://github.com/arcee-ai/mergekit/issues/611)) and for the Gemma 3 VL passthrough crash fix ([#537](https://github.com/arcee-ai/mergekit/issues/537)). | Not yet |
 
 For anything not listed above, behavior matches upstream — see the [mergekit README below](#mergekit) and the [upstream repo](https://github.com/arcee-ai/mergekit).
 
