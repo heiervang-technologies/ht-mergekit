@@ -102,9 +102,13 @@ class MergePlanner:
         # slices -> modules.slices
         if self.config.slices:
             if len(self.arch_info.modules) != 1:
+                module_keys = sorted(self.arch_info.modules.keys())
                 raise RuntimeError(
-                    "Model has multiple modules, must use modules: config syntax "
-                    "to work with slices"
+                    "Top-level `slices:` is only supported for single-module "
+                    f"architectures. This architecture has {len(module_keys)} "
+                    f"modules: {module_keys}. Wrap your slices under the "
+                    "module you want to operate on, e.g.:\n"
+                    f"  modules:\n    {module_keys[0]}:\n      slices: [...]"
                 )
             module_name = list(self.arch_info.modules.keys())[0]
             self.config.modules = {
