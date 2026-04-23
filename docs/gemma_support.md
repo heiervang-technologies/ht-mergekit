@@ -109,3 +109,18 @@ from the donor. That inflates the parameter count. This is expected
 behaviour of per-module merge configs; improving the parameter-count
 accounting surfaced to the user is out of scope for the Gemma 4 PR and
 tracked for later.
+
+## Known issues / environment
+
+- **`transformers >= 5.5` required.** Under the 5.5+ schema for
+  `PretrainedConfig`, pydantic cannot finish building
+  `ConfiguredModuleArchitecture`'s schema until `torch` is present in the
+  module namespace. `mergekit/architecture/base.py` now imports `torch`
+  and calls `model_rebuild()` at the bottom of the file to resolve this
+  eagerly — do not remove that block. Older `transformers` (4.x) works
+  too; the fix is inert there.
+- **`test_lazy_unpickle` fails on `torch >= 2.5`** with
+  `'torch.storage.TypedStorage' object has no attribute 'execute'` at
+  `mergekit/io/loader.py:61`. This pre-dates Gemma 4 support (observed on
+  `ht` branch CI run 24766708225 before this PR). Out of scope for the
+  Gemma PR; tracked for a separate follow-up branch (`fix/torch-2.5-lazy-unpickle`).
