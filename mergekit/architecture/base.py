@@ -151,3 +151,16 @@ class ConfiguredModelArchitecture(BaseModel, frozen=True, arbitrary_types_allowe
             config=self.config,
             weight_prefix=self.info.modules[module_name].weight_prefix,
         )
+
+
+# Force-resolve forward references at import time. Recent
+# `transformers`+`pydantic` combos (observed on transformers >= 5.5) raise
+# `PydanticUserError: ConfiguredModuleArchitecture is not fully defined` the
+# first time the class is instantiated because `PretrainedConfig`'s own
+# schema pulls in `torch.Tensor` through typing machinery. An eager
+# `model_rebuild()` here with `torch` in scope resolves the schema once and
+# for all, so merge planning never hits that cold-path error.
+import torch  # noqa: F401,E402  (needed in module namespace for model_rebuild)
+
+ConfiguredModuleArchitecture.model_rebuild()
+ConfiguredModelArchitecture.model_rebuild()
