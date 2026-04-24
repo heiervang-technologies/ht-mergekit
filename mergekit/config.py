@@ -244,11 +244,35 @@ class ConfigReader(BaseModel):
                 return value
 
         if required:
-            path_paths = [str(s) for s in [model, self.tensor_name] if s]
-            p = ".".join(path_paths)
-            suffix = f" for {p}" if p else ""
-            raise RuntimeError(f"Missing required parameter {name}{suffix}")
+            raise RuntimeError(self._missing_parameter_message(name, model))
         return default
+
+    def _missing_parameter_message(
+        self, name: str, model: Optional[ModelReference]
+    ) -> str:
+        method = self.config.merge_method
+        where = [f"for merge method {method!r}"] if method else []
+        if model:
+            where.append(f"on model {model}")
+        if self.tensor_name:
+            where.append(f"tensor {self.tensor_name}")
+        header = f"Missing required parameter {name!r} " + ", ".join(where)
+
+        if model:
+            hint = (
+                "Set it under the model's `parameters:` block, e.g.:\n"
+                "  models:\n"
+                f"    - model: {model}\n"
+                "      parameters:\n"
+                f"        {name}: <value>"
+            )
+        else:
+            hint = (
+                "Set it at the top level of your merge config, e.g.:\n"
+                "  parameters:\n"
+                f"    {name}: <value>"
+            )
+        return header + ".\n" + hint
 
 
 class ConfigYamlDumper(yaml.Dumper):
