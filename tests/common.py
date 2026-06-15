@@ -5,12 +5,18 @@ from typing import Callable, Optional
 from transformers import (
     AutoConfig,
     CLIPVisionConfig,
+    Gemma2Config,
+    Gemma2ForCausalLM,
+    Gemma3Config,
+    Gemma3ForConditionalGeneration,
+    Gemma3TextConfig,
     GPT2Config,
     GPT2LMHeadModel,
     LlamaConfig,
     LlamaForCausalLM,
     LlavaConfig,
     LlavaForConditionalGeneration,
+    SiglipVisionConfig,
 )
 
 from mergekit.architecture import (
@@ -129,5 +135,53 @@ def make_picoLlaVa(path: str):
 
     # Instantiate the model
     model = LlavaForConditionalGeneration(config=llava_config)
+    model.save_pretrained(path, safe_serialization=True)
+    return str(path)
+
+
+def make_picoGemma3VL(path: str):
+    """Tiny Gemma3ForConditionalGeneration checkpoint for tests.
+
+    Exercises the multi-module arch path (text_decoder + vision_tower +
+    multi_modal_projector) where multi_modal_projector has a null
+    num_layers_config_key.
+    """
+    text_config = Gemma3TextConfig(
+        vocab_size=64,
+        hidden_size=32,
+        intermediate_size=48,
+        num_attention_heads=4,
+        num_hidden_layers=2,
+        num_key_value_heads=2,
+        head_dim=8,
+    )
+    vision_config = SiglipVisionConfig(
+        image_size=16,
+        patch_size=4,
+        num_hidden_layers=2,
+        num_attention_heads=2,
+        hidden_size=32,
+        intermediate_size=64,
+    )
+    cfg = Gemma3Config(text_config=text_config, vision_config=vision_config)
+    model = Gemma3ForConditionalGeneration(config=cfg)
+    model.save_pretrained(path, safe_serialization=True)
+    return str(path)
+
+
+def make_picoGemma2(path: str, vocab_size: int = 64):
+    """Tiny Gemma2ForCausalLM checkpoint for regression tests on upstream
+    arcee-ai/mergekit#611 (SLERP/TIES on tied-embedding Gemma 2)."""
+    cfg = Gemma2Config(
+        vocab_size=vocab_size,
+        hidden_size=32,
+        intermediate_size=48,
+        num_attention_heads=4,
+        num_hidden_layers=2,
+        num_key_value_heads=2,
+        head_dim=8,
+        tie_word_embeddings=True,
+    )
+    model = Gemma2ForCausalLM(cfg)
     model.save_pretrained(path, safe_serialization=True)
     return str(path)
